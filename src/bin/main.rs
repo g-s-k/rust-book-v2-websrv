@@ -1,3 +1,7 @@
+extern crate websrv;
+
+use websrv::ThreadPool;
+
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
