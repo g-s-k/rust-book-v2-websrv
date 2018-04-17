@@ -1,28 +1,15 @@
+// imports
+
 use std::thread;
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::sync::Mutex;
 
+// ThreadPool
+
 pub struct ThreadPool {
     workers: Vec<Worker>,
     sender: mpsc::Sender<Message>,
-}
-
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<FnBox + Send + 'static>;
-
-enum Message {
-    NewJob(Job),
-    Terminate,
 }
 
 impl ThreadPool {
@@ -100,6 +87,27 @@ impl Drop for ThreadPool {
         }
     }
 }
+
+// Job / Message
+
+trait FnBox {
+    fn call_box(self: Box<Self>);
+}
+
+impl<F: FnOnce()> FnBox for F {
+    fn call_box(self: Box<F>) {
+        (*self)()
+    }
+}
+
+type Job = Box<FnBox + Send + 'static>;
+
+enum Message {
+    NewJob(Job),
+    Terminate,
+}
+
+// Worker
 
 struct Worker {
     id: usize,
