@@ -34,6 +34,12 @@ impl ThreadPool {
     /// # Panics
     ///
     /// The `new` function will panic if the size is zero.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let tp = websrv::ThreadPool::new(3);
+    /// ```
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -52,6 +58,19 @@ impl ThreadPool {
         }
     }
 
+    /// Execute a closure on your ThreadPool instance.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let tp = websrv::ThreadPool::new(4);
+    /// 
+    /// for indx in 1..10 {
+    ///     tp.execute(|| {
+    ///         println!("looks great");
+    ///     });
+    /// }
+    /// ```
     pub fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
