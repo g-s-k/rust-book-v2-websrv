@@ -51,7 +51,7 @@ impl ThreadPool {
     ///
     /// ```
     /// let tp = websrv::ThreadPool::new(4);
-    /// 
+    ///
     /// for indx in 1..10 {
     ///     tp.execute(|| {
     ///         println!("looks great");
@@ -139,5 +139,23 @@ impl Worker {
             id,
             thread: Some(thread),
         }
+    }
+}
+
+// tests
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn must_have_some_threads() {
+        ThreadPool::new(0);
+    }
+
+    #[test]
+    fn make_new_pool() {
+        ThreadPool::new(4);
     }
 }
